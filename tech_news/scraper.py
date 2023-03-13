@@ -1,5 +1,7 @@
+from bs4 import BeautifulSoup
 import requests
 from time import sleep
+
 headers = {"user-agent": "Fake user-agent"}
 
 
@@ -10,13 +12,19 @@ def fetch(url):
         response.raise_for_status()
     except (requests.ReadTimeout, requests.HTTPError):
         return None
-    
+
     return response.text
 
 
 # Requisito 2
 def scrape_updates(html_content):
-    """Seu código deve vir aqui"""
+    soup = BeautifulSoup(html_content, "html.parser")
+    news = soup.find_all("a", {"class": "cs-overlay-link"})
+    urls = []
+    for url in news:
+        urls.append(url['href'])
+    
+    return urls
 
 
 # Requisito 3
