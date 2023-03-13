@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 from time import sleep
+import re
 
 headers = {"user-agent": "Fake user-agent"}
 
@@ -39,9 +40,29 @@ def scrape_next_page_link(html_content):
 
 # Requisito 4
 def scrape_news(html_content):
-    """Seu código deve vir aqui"""
+    soup = BeautifulSoup(html_content, "html.parser")
+    url = soup.find('link', attrs={"rel": "canonical"})['href']
+    title = soup.find('h1', {'class': 'entry-title'}).text.strip()
+    timestamps = soup.find('li', {'class': 'meta-date'}).text
+    writer = soup.find('a', {'class': 'url'}).text
+    reading_time = soup.find('li', {'class': 'meta-reading-time'}).text
+    summary = soup.find('p').text.strip()
+    category = soup.find('span', {'class': 'label'}).text
+    return {
+        'url': url,
+        'title': title,
+        'timestamp': timestamps,
+        'writer': writer,
+        'reading_time': int(re.findall('[0-9]+', reading_time)[0]),
+        'summary': summary,
+        'category': category
+    }
 
 
 # Requisito 5
 def get_tech_news(amount):
     """Seu código deve vir aqui"""
+
+
+local = fetch('https://blog.betrybe.com/tecnologia/antivirus-android/')
+print(scrape_news(local))
