@@ -22,14 +22,19 @@ def scrape_updates(html_content):
     news = soup.find_all("a", {"class": "cs-overlay-link"})
     urls = []
     for url in news:
-        urls.append(url['href'])
-    
+        urls.append(url["href"])
+
     return urls
 
 
 # Requisito 3
 def scrape_next_page_link(html_content):
-    """Seu código deve vir aqui"""
+    soup = BeautifulSoup(html_content, "html.parser")
+    try:
+        link = soup.find("a", {"class": "next"})["href"]
+        return link
+    except TypeError:
+        return None
 
 
 # Requisito 4
