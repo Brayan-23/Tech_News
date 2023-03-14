@@ -79,3 +79,6 @@ def get_tech_news(amount):
                 break
     create_news(list_news)
     return list_news
+
+
+# get_tech_news(10)
